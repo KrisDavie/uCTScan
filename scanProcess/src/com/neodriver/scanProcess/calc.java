@@ -1,4 +1,4 @@
-package scanProcess;
+package com.neodriver.scanProcess;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-public class test {
+public class calc {
 
-	public static void main(String[] args) throws IOException {
+	public calc(String[] args) throws IOException {
 
 		String bigWidthFile = "";
 		Scanner input = new Scanner(System.in);

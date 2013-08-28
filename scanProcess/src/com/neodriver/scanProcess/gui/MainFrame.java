@@ -2,9 +2,11 @@ package com.neodriver.scanProcess.gui;
 
 //Imports
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BoxLayout;
@@ -12,10 +14,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -32,8 +36,9 @@ public class MainFrame extends JFrame {
 	// String to change title based on current calc
 	String curApp = "Main";
 	int winX = 300;
-	int winY = 200;
+	int winY = 220;
 	int test = 1;
+	String folderText = "";
 
 	// Method to call the GUI
 	public MainFrame() {
@@ -82,18 +87,22 @@ public class MainFrame extends JFrame {
 		JPanel panelButtons = new JPanel();
 		JPanel panelInputs = new JPanel();
 		JPanel panelDirectory = new JPanel();
-		panelInputs.setLayout(new BoxLayout(panelInputs, BoxLayout.Y_AXIS));
+		panelInputs.setLayout(new BoxLayout(panelInputs, BoxLayout.PAGE_AXIS));
 		panelButtons.setLayout(new BorderLayout());
 		panelDirectory.setLayout(new BorderLayout());
 		getContentPane().add(BorderLayout.SOUTH, panelButtons);
-		getContentPane().add(BorderLayout.CENTER, panelInputs);
-		getContentPane().add(BorderLayout.NORTH, panelDirectory);
+		getContentPane().add(BorderLayout.NORTH, panelInputs);
+		//getContentPane().add(BorderLayout.NORTH, panelDirectory);
 
 		// Create the quit button and name it etc.
 		JButton quitButton = new JButton("Quit");
 		quitButton.setToolTipText("Quits the program");
 		JButton runButton = new JButton("Run");
 		quitButton.setToolTipText("Runs the program");
+		JButton browseButton = new JButton("Browse...");
+		browseButton.setToolTipText("Browse for the images folder");
+		
+	
 
 		// Listen to the quit button for an event (pressed) and quit
 		quitButton.addActionListener(new ActionListener() {
@@ -116,19 +125,40 @@ public class MainFrame extends JFrame {
 
 			}
 		});
+		final JFileChooser imagesFolder = new JFileChooser();
 
-		// Create the directory selector
-		JFileChooser imagesFolder = new JFileChooser();
-		imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+		
+		// Try and create the browse for directory button
+		browseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				imagesFolder.showOpenDialog(new Frame());
+				folderText = imagesFolder.getSelectedFile().toString();
+						
+			}
+		});
 
 		// Create the input boxes
 
 		JTextField imgsToUse = new JTextField(3);
 		JTextField umPerPix = new JTextField(5);
+		JLabel imgsLabel = new JLabel("How many images shall we use?");
+		JLabel umLabel = new JLabel ("How many micrometers per pixel?");
+		JTextField selFolder = new JTextField();
+		JLabel folderPath = new JLabel("Please enter the path to the images folder");
+		
 
 		// Add the inputs to the input panel
+		
+		panelInputs.add(folderPath);
 
+		selFolder.setText(folderText);
+		panelInputs.add(selFolder);
+		panelInputs.add(browseButton);
+		panelInputs.add(imgsLabel);
 		panelInputs.add(imgsToUse);
+		panelInputs.add(umLabel);
 		panelInputs.add(umPerPix);
 
 		// Add the button to the Button panel
@@ -136,7 +166,7 @@ public class MainFrame extends JFrame {
 		panelButtons.add(quitButton, BorderLayout.EAST);
 
 		// Set window properties
-		this.setTitle("Science Calc v0.0 - " + curApp);
+		this.setTitle("Image Process v0.0 - " + curApp);
 		this.setSize(winX, winY);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);

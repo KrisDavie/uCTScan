@@ -4,9 +4,10 @@ package com.neodriver.scanProcess.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+
 import javax.swing.*;
 
-import com.neodriver.scanProcess.calc;
+import com.neodriver.scanProcess.ImageCount;
 
 //Extend JFrame so we can use its methods
 public class MainFrame extends JFrame {
@@ -14,20 +15,31 @@ public class MainFrame extends JFrame {
 	// Convention
 	private static final long serialVersionUID = 1L;
 
+	protected static final Exception FileNotFoundException = null;
+
 	// String to change title based on current calc
 	String curApp = "Main";
 	int winX = 300;
 	int winY = 220;
-	int test = 1;
 	
+	final JFileChooser imagesFolder = new JFileChooser();
+	final JTextField imgsToUse = new JTextField(3);
+	final JTextField umPerPix = new JTextField(5);
+	JLabel imgsLabel = new JLabel("How many images shall we use?");
+	JLabel umLabel = new JLabel("How many micrometers per pixel?");
+	final JTextField selFolder = new JTextField(15);
+	JLabel folderPath = new JLabel("Please enter the path to the images folder");
+	public int[] finalVals = null;
+	public int bigWidthFileNum = 0;
+	public int finalPos = 0;
+
 
 	// Method to call the GUI
 	public MainFrame() {
-
 		initUI();
-		repaint();
-
 	}
+	
+
 
 	// Method to init the UI
 	public void initUI() {
@@ -37,7 +49,6 @@ public class MainFrame extends JFrame {
 		this.setSize(winX, winY);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		final String folderText = "test";
 
 		// Create the menu
 		JMenuBar MainMenu = new JMenuBar();
@@ -52,8 +63,16 @@ public class MainFrame extends JFrame {
 		fileOpen.setToolTipText("Select the directory to open");
 		fileOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+				imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				imagesFolder.showOpenDialog(new Frame());
+				selFolder.setText(imagesFolder.getSelectedFile().toString());
+				try {
+					calcFiles();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				return;
-			}
+				}
 		});
 
 		// Set the exit button props
@@ -68,6 +87,7 @@ public class MainFrame extends JFrame {
 
 		// Add the menu and it hierarchy
 		file.add(fileExit);
+		file.add(fileOpen);
 		MainMenu.add(file);
 		this.setJMenuBar(MainMenu);
 
@@ -81,21 +101,16 @@ public class MainFrame extends JFrame {
 		getContentPane().add(BorderLayout.SOUTH, panelButtons);
 		getContentPane().add(BorderLayout.NORTH, panelInputs);
 
-		JTextField imgsToUse = new JTextField(3);
-		JTextField umPerPix = new JTextField(5);
-		JLabel imgsLabel = new JLabel("How many images shall we use?");
-		JLabel umLabel = new JLabel("How many micrometers per pixel?");
-		final JTextField selFolder = new JTextField(folderText);
-		System.out.println(selFolder.getText());
-		JLabel folderPath = new JLabel("Please enter the path to the images folder");
-
+		
 		// Create the quit button and name it etc.
 		JButton quitButton = new JButton("Quit");
 		quitButton.setToolTipText("Quits the program");
-		JButton runButton = new JButton("Run");
+		final JButton runButton = new JButton("Run");
 		quitButton.setToolTipText("Runs the program");
 		JButton browseButton = new JButton("Browse...");
 		browseButton.setToolTipText("Browse for the images folder");
+		JButton addButton = new JButton("Add");
+		addButton.setToolTipText("Adds the current setting for batch processing");
 
 		// Add the inputs to the input panel
 
@@ -112,6 +127,7 @@ public class MainFrame extends JFrame {
 		// Add the button to the Button panel
 		panelButtons.add(runButton, BorderLayout.WEST);
 		panelButtons.add(quitButton, BorderLayout.EAST);
+		panelButtons.add(addButton, BorderLayout.CENTER);
 
 		//getContentPane().add(BorderLayout.NORTH, panelDirectory);
 
@@ -129,21 +145,38 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				try {
-					calc calc1 = new calc(null);
-				} catch (IOException e) {
-					e.printStackTrace();
+					File checkDir = new File(selFolder.getText());
+					if (checkDir.exists()) {
+						if (checkDir.isFile()) {
+							throw FileNotFoundException;
+						}
+					} else {
+						throw FileNotFoundException;
+					}
+
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(runButton, "The path provided is not a valid directory!", "Error!", JOptionPane.ERROR_MESSAGE);
 				}
 
+				// Add a try to check if we are using less than the max usable images AND it is a number
+				// Add a try to check if we are using a valid number for ums per pixel - maybe make an error if is very large or small?
 			}
-		});
-		final JFileChooser imagesFolder = new JFileChooser();
 
+
+		});
+		
+		
 		// Try and create the browse for directory button
 		browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				imagesFolder.showOpenDialog(new Frame());
 				selFolder.setText(imagesFolder.getSelectedFile().toString());
+				try {
+					calcFiles();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				return;
 			}
 		});
@@ -152,6 +185,14 @@ public class MainFrame extends JFrame {
 
 	}
 
+	public void calcFiles() throws IOException {
+		 ImageCount count1 = new ImageCount(selFolder.getText(), imgsToUse.getText(), umPerPix.getText());
+		 finalVals = count1.finalWidths;
+		 bigWidthFileNum = count1.bigWidthFileNum;
+		 finalPos = count1.finalPos;				 
+		 }
+	
+	
 	public static void main(String[] args) {
 
 		// Set the window to look and feel like the current System

@@ -7,23 +7,36 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-public class calc {
+public class ImageCount {
+	
+	public int bigWidthFileNum = 0;
+	public int[] finalWidths = null;
+	public int finalPos = 0;
 
-	public calc(String[] args) throws IOException {
+	public ImageCount(String arg1, String arg2, String arg3) throws IOException {
+		// args 0 = folder path
+		// args 1 = number of images
+		// args 2 = number of um per pixel
 
+		String images;
 		String bigWidthFile = "";
 		Scanner input = new Scanner(System.in);
 
-		System.out.println("Please provide the folder path with the images:-");
-		String images = input.nextLine();
-		System.out.println("You provided: " + images);
+		int fNum = 0;
+
+		if (arg1 == null) {
+			System.out.println("Please provide the folder path with the images:-");
+			images = input.nextLine();
+			System.out.println("You provided: " + images);
+		} else {
+			images = arg1;
+		}
 
 		File dir = new File(images);
-		int dLength = new File(images).list().length;
-		int[] filePos = new int[dLength];
-		int[] fileLen = new int[dLength];
-		String[] fileNames = new String[dLength];
-		int fNum = 0;
+		int dirLength = new File(images).list().length;
+		int[] filePos = new int[dirLength];
+		int[] fileLen = new int[dirLength];
+		String[] fileNames = new String[dirLength];
 
 		// For each file in the directory given
 		// check every line for every image and 
@@ -73,7 +86,7 @@ public class calc {
 
 		// Find the single widest line across
 		// all of the files we checked
-		int bigWidthFileNum = 0;
+
 		int bigWidth = 0;
 		for (int i = 0; i < fileLen.length; i++) {
 			if (fileLen[i] > bigWidth) {
@@ -81,14 +94,14 @@ public class calc {
 				bigWidthFileNum = i;
 			}
 		}
-		int finalPos = filePos[bigWidthFileNum];
+		finalPos = filePos[bigWidthFileNum];
 		System.out.println("The final position we are going to use is: " + finalPos + ". This is from the file : " + fileNames[bigWidthFileNum]);
 
 		// Reset a few vars and cycle through
 		// the folder again, this time only
 		// checking at the widest position
 		fNum = 0;
-		int[] finalWidths = new int[dLength];
+		finalWidths = new int[dirLength];
 		for (File child : dir.listFiles()) {
 
 			BufferedImage curImg = ImageIO.read(child);
@@ -117,37 +130,15 @@ public class calc {
 		// Final calculations to work
 		// out the average - taking in
 		// a few user inputs
-		int total = 0;
-		int avg = 0;
 		int maxFiles = 0;
-		System.out.println("We have " + dLength + " files. The file with the largest line was " + (bigWidthFileNum + 1));
-		if (bigWidthFileNum <= (dLength - bigWidthFileNum - 1)) {
+
+		System.out.println("We have " + dirLength + " files. The file with the largest line was " + (bigWidthFileNum + 1));
+		if (bigWidthFileNum <= (dirLength - bigWidthFileNum - 1)) {
 			System.out.println("We can use a max of " + bigWidthFileNum + " files either side.");
 			maxFiles = bigWidthFileNum;
 		} else {
-			System.out.println("We can use a max of " + (dLength - bigWidthFileNum - 1) + " files either side.");
+			System.out.println("We can use a max of " + (dirLength - bigWidthFileNum - 1) + " files either side.");
 		}
-
-		int lines = 0;
-		// How many images are we going to use?
-		while (true) {
-			System.out.println("How many shall we use?");
-			lines = input.nextInt();
-			if (lines <= maxFiles) {
-				System.out.println("Ok, we will use " + lines + " images.");
-				break;
-			}
-			System.out.println("That is too many. Please enter another number");
-		}
-
-		for (int i = (bigWidthFileNum - lines); i <= (bigWidthFileNum + lines); i++) {
-			total += finalWidths[i];
-			avg = total / finalWidths.length;
-		}
-		
-		System.out.println("How many micrometers per pixel? (to 3 dp)");
-		float pixelSize = input.nextFloat(); 
-		System.out.println("The final average is: " + (avg * 9.792));
 
 	}
 

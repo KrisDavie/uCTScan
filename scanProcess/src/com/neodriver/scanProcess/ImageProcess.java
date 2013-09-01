@@ -2,34 +2,32 @@ package com.neodriver.scanProcess;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Scanner;
-
+import java.io.IOException;
 import javax.imageio.ImageIO;
-
-import com.neodriver.scanProcess.gui.MainFrame;
 
 public class ImageProcess {
 
-	public ImageProcess(int arg0, String arg1, String arg2, String arg3) {
+	public ImageProcess(int arg0, String arg1, int arg2, int arg3, float arg4) throws IOException {
 
-		// arg0 = position of the line
+		// arg0 = position of the line (finalPos)
 		// arg1 = directory path
-		// arg2 = number of files to use
-		// arg3 = number of um per pixel
+		// arg2 = number of middle image (bigWidthFileNum)
+		// arg3 = number of files to use
+		// arg4 = number of um per pixel
 		
 		int total = 0;
 		int avg = 0;
-		int lines = 0;
-		float pixelSize = 0;
-		int maxFiles = 0;
-		Scanner input = new Scanner(System.in);
+		int numFiles = arg3;
 		int fNum = 0;
 		int finalPos = arg0;
 		File imgDir = new File(arg1);
-		int dirLength = (int) imgDir.length();
+		int bigWidthFileNum = arg2;
+		int dirLength = (int) imgDir.list().length;
+		System.out.println(dirLength);
 		int[] finalWidths = new int[dirLength];
+		
 		for (File child : imgDir.listFiles()) {
-
+			
 			BufferedImage curImg = ImageIO.read(child);
 			int width = curImg.getWidth();
 			int widest = 0;
@@ -53,35 +51,11 @@ public class ImageProcess {
 			fNum++;
 		}
 
-		// How many images are we going to use?
-		if (arg1 == null) {
-			while (true) {
-				System.out.println("How many shall we use?");
-				lines = input.nextInt();
-				if (lines <= maxFiles) {
-					System.out.println("Ok, we will use " + lines + " images.");
-					break;
-				}
-				System.out.println("That is too many. Please enter another number");
-			}
-		} else {
-			lines = Integer.valueOf(arg1);
-		}
-		
-		for (int i = (bigWidthFileNum - lines); i <= (bigWidthFileNum + lines); i++) {
+		for (int i = (bigWidthFileNum - numFiles); i <= (bigWidthFileNum + numFiles); i++) {
 			total += finalWidths[i];
 			avg = total / finalWidths.length;
 		}
-
-		if (arg2 == null) {
-			System.out.println("How many micrometers per pixel? (to 3 dp)");
-			pixelSize = input.nextFloat();
-
-		} else {
-			pixelSize = Float.valueOf(arg2);
-		}
-
-		System.out.println("The final average is: " + (avg * 9.792));
+		System.out.println("The final average is: " + (avg * arg4));
 	}
 
 }

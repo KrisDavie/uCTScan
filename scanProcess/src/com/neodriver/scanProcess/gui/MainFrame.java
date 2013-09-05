@@ -55,7 +55,7 @@ public class MainFrame extends JFrame {
 		// Make the File menu and allow to open wth F
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
-
+		
 		// Set the open button props
 		JMenuItem fileOpen = new JMenuItem("Open");
 		fileOpen.setMnemonic(KeyEvent.VK_O);
@@ -68,6 +68,8 @@ public class MainFrame extends JFrame {
 				try {
 					calcFiles();
 				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				return;
@@ -183,7 +185,6 @@ public class MainFrame extends JFrame {
 				try {
 					finalCalc();
 				} catch (java.io.IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -202,6 +203,8 @@ public class MainFrame extends JFrame {
 					calcFiles();
 				} catch (IOException e) {
 					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return;
 			}
@@ -211,7 +214,7 @@ public class MainFrame extends JFrame {
 
 	}
 
-	public void calcFiles() throws IOException {
+	public void calcFiles() throws Exception {
 		ImageCount count1 = new ImageCount(selFolder.getText());
 		finalVals = count1.finalWidths;
 		bigWidthFileNum = count1.bigWidthFileNum;

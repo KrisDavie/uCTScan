@@ -6,6 +6,17 @@ import javax.swing.*;
 
 public class TestFrame extends JFrame {
 	
+	int testInt = 0;
+	final JLabel testText = new JLabel("");
+	final Timer testTimer = new Timer(0, new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			testText.setText("hello" + testInt);
+			testInt++;
+		}
+		
+	});		
+	
 	private static final long serialVersionUID = 1L;
 
 	public TestFrame() {
@@ -14,18 +25,16 @@ public class TestFrame extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		JPanel testPanel = new JPanel();
 		JButton testButton = new JButton("I am a test Button");
-		final JTextField testText = new JTextField(25);
 		testText.setText("This is some test text");
 		this.add(testPanel);
 		testPanel.add(testButton);
 		testPanel.add(testText);
-		
+
 		testButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				testText.setText("This is some new test text that has been changed");
+				testTimer.start();
 			
-				
 			}
 			
 		});

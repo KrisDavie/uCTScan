@@ -1,9 +1,9 @@
 package com.neodriver.scanProcess;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,7 +19,7 @@ public class ImageCount {
 	public String images = null;
 	public int dirLength = 0;
 	public int curFile = 1;	
-	public final Timer progressTimer = null;
+	//public final Timer progressTimer = null;
 
 	public ImageCount(String arg1) throws IOException, InterruptedException {
 		
@@ -40,21 +40,23 @@ public class ImageCount {
 		progressFrame.setTitle("Progress");
 		progressFrame.setSize(300, 100);
 		progressFrame.setLocationRelativeTo(null);
-		progressFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel progressPanel = new JPanel();
 		//final JLabel progressSoFar = new JLabel("Processing images " + curFile + " of " + dirLength);
 		final JLabel progressSoFar = new JLabel("Processing images");
 		progressFrame.add(progressPanel);
 		progressPanel.add(progressSoFar);
 		progressPanel.add(progressBar);
+		
+		File[] dirList = dir.listFiles();
+		Arrays.sort(dirList);
 
 		// For each file in the directory given
 		// check every line for every image and 
 		// find the widest white line
-		for (File child : dir.listFiles()) {
-			System.out.println("Hello1");
+		for (File child : dirList) {
+			//System.out.println("Hello1");
 			progressSoFar.setText("Processing image " + curFile + " of " + dirLength);
-			System.out.println("Hello2");
+			//System.out.println("Hello2");
 
 			System.out.println("Working on: " + child);
 			BufferedImage curImg = ImageIO.read(child);
@@ -124,7 +126,7 @@ public class ImageCount {
 			maxFiles = (dirLength - bigWidthFileNum - 1);
 		}
 		
-		//progressFrame.setVisible(false);
+		progressFrame.setVisible(false);
 
 	}
 

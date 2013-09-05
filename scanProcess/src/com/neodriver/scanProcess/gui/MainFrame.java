@@ -65,13 +65,22 @@ public class MainFrame extends JFrame {
 				imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				imagesFolder.showOpenDialog(new Frame());
 				selFolder.setText(imagesFolder.getSelectedFile().toString());
-				try {
-					calcFiles();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				Thread calcThread = new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+							calcFiles();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}						
+					}
+					
+				});
+				calcThread.start();
+				
 				return;
 			}
 		});
@@ -87,8 +96,10 @@ public class MainFrame extends JFrame {
 		});
 
 		// Add the menu and it hierarchy
-		file.add(fileExit);
 		file.add(fileOpen);
+		file.addSeparator();
+		file.add(fileExit);
+
 		MainMenu.add(file);
 		this.setJMenuBar(MainMenu);
 
@@ -199,13 +210,22 @@ public class MainFrame extends JFrame {
 				imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				imagesFolder.showOpenDialog(new Frame());
 				selFolder.setText(imagesFolder.getSelectedFile().toString());
-				try {
-					calcFiles();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				Thread calcThread = new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+							calcFiles();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}						
+					}
+					
+				});
+				calcThread.start();
+				
 				return;
 			}
 		});
@@ -220,6 +240,7 @@ public class MainFrame extends JFrame {
 		bigWidthFileNum = count1.bigWidthFileNum;
 		maxFiles = count1.maxFiles;
 		finalPos = count1.finalPos;
+		System.out.println("FV" + maxFiles + count1.maxFiles);
 		imgNum.setText("Max images to use: " + (maxFiles - 1));
 
 	}

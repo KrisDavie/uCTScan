@@ -240,8 +240,9 @@ public class MainFrame extends JFrame {
 		bigWidthFileNum = count1.bigWidthFileNum;
 		maxFiles = count1.maxFiles;
 		finalPos = count1.finalPos;
-		System.out.println("FV" + maxFiles + count1.maxFiles);
 		imgNum.setText("Max images to use: " + (maxFiles - 1));
+		imgsToUse.setText("" +(maxFiles - 1));
+		
 
 	}
 	

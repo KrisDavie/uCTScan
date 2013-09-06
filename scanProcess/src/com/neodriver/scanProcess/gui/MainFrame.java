@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
 
 	protected static final Exception FileNotFoundException = null;
 	protected static final Exception IOException = null;
-	// String to change title 
+	// String to change title
 	int winX = 300;
 	int winY = 250;
 
@@ -34,6 +34,32 @@ public class MainFrame extends JFrame {
 	public int bigWidthFileNum = 0;
 	public int finalPos = 0;
 	public int maxFiles = 0;
+	public ActionListener openListen = new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+			imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int returnVal = imagesFolder.showOpenDialog(new Frame());
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				selFolder.setText(imagesFolder.getSelectedFile().toString());
+				Thread calcThread = new Thread(new Runnable() {
+	
+					@Override
+					public void run() {
+						try {
+							calcFiles();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+	
+				});
+				calcThread.start();
+				return;
+			}
+			
+		}
+	};
 
 	// Method to call the GUI
 	public MainFrame() {
@@ -55,35 +81,12 @@ public class MainFrame extends JFrame {
 		// Make the File menu and allow to open wth F
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
-		
+
 		// Set the open button props
 		JMenuItem fileOpen = new JMenuItem("Open");
 		fileOpen.setMnemonic(KeyEvent.VK_O);
 		fileOpen.setToolTipText("Select the directory to open");
-		fileOpen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				imagesFolder.showOpenDialog(new Frame());
-				selFolder.setText(imagesFolder.getSelectedFile().toString());
-				Thread calcThread = new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						try {
-							calcFiles();
-						} catch (IOException e) {
-							e.printStackTrace();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}						
-					}
-					
-				});
-				calcThread.start();
-				
-				return;
-			}
-		});
+		fileOpen.addActionListener(openListen);
 
 		// Set the exit button props
 		JMenuItem fileExit = new JMenuItem("Exit");
@@ -122,13 +125,14 @@ public class MainFrame extends JFrame {
 		JButton browseButton = new JButton("Browse...");
 		browseButton.setToolTipText("Browse for the images folder");
 		JButton addButton = new JButton("Add");
-		addButton.setToolTipText("Adds the current setting for batch processing");
+		addButton
+				.setToolTipText("Adds the current setting for batch processing");
 
 		// Add the inputs to the input panel
 
 		panelInputs.add(folderPath);
 
-		//selFolder.setText(folderText);
+		// selFolder.setText(folderText);
 		panelInputs.add(selFolder);
 		panelInputs.add(browseButton);
 		panelInputs.add(Box.createRigidArea(new Dimension(0, 6)));
@@ -146,7 +150,7 @@ public class MainFrame extends JFrame {
 		addPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		panelButtons.add(addPanel);
 		addPanel.add(addButton);
-		//getContentPane().add(BorderLayout.NORTH, panelDirectory);
+		// getContentPane().add(BorderLayout.NORTH, panelDirectory);
 
 		// Listen to the quit button for an event (pressed) and quit
 		quitButton.addActionListener(new ActionListener() {
@@ -171,64 +175,54 @@ public class MainFrame extends JFrame {
 						throw FileNotFoundException;
 					}
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(runButton, "The path provided is not a valid directory!", "Error!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(runButton,
+							"The path provided is not a valid directory!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				try {
-					if (Integer.valueOf(imgsToUse.getText()) <= (bigWidthFileNum - 1) && Integer.valueOf(imgsToUse.getText()) > 0) {
+					if (Integer.valueOf(imgsToUse.getText()) <= (bigWidthFileNum - 1)
+							&& Integer.valueOf(imgsToUse.getText()) > 0) {
 					} else {
 						throw IOException;
 					}
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(runButton, "The max images to use is either greater than allowed, or is not a number!", "Error!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane
+							.showMessageDialog(
+									runButton,
+									"The max images to use is either greater than allowed, or is not a number!",
+									"Error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				try {
-					if (Float.valueOf(umPerPix.getText()) != null && Float.valueOf(umPerPix.getText()) > 0 ) {
+					if (Double.valueOf(umPerPix.getText()) != null
+							&& Double.valueOf(umPerPix.getText()) > 0) {
 					} else {
 						throw IOException;
 					}
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(runButton, "The micrometers per pixel is invalid. Please enter a value greater than 0!", "Error!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane
+							.showMessageDialog(
+									runButton,
+									"The micrometers per pixel is invalid. Please enter a value greater than 0!",
+									"Error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
+
 				try {
 					finalCalc();
 				} catch (java.io.IOException e) {
 					e.printStackTrace();
 				}
 
-				// Add a try to check if we are using a valid number for ums per pixel - maybe make an error if is very large or small?
+				// Add a try to check if we are using a valid number for ums per
+				// pixel - maybe make an error if is very large or small?
 			}
 
 		});
 
 		// Try and create the browse for directory button
-		browseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				imagesFolder.showOpenDialog(new Frame());
-				selFolder.setText(imagesFolder.getSelectedFile().toString());
-				Thread calcThread = new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						try {
-							calcFiles();
-						} catch (IOException e) {
-							e.printStackTrace();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}						
-					}
-					
-				});
-				calcThread.start();
-				
-				return;
-			}
-		});
+		browseButton.addActionListener(openListen);
 
 		// Create the input boxes
 
@@ -241,13 +235,15 @@ public class MainFrame extends JFrame {
 		maxFiles = count1.maxFiles;
 		finalPos = count1.finalPos;
 		imgNum.setText("Max images to use: " + (maxFiles - 1));
-		imgsToUse.setText("" +(maxFiles - 1));
-		
+		imgsToUse.setText("" + (maxFiles - 1));
+		umPerPix.setText(Double.toString(count1.pixelSize));
 
 	}
-	
+
 	public void finalCalc() throws IOException {
-		ImageProcess process1 = new ImageProcess(finalPos, selFolder.getText(), bigWidthFileNum, Integer.valueOf(imgsToUse.getText()), Float.valueOf(umPerPix.getText()));
+		ImageProcess process1 = new ImageProcess(finalPos, selFolder.getText(),
+				bigWidthFileNum, Integer.valueOf(imgsToUse.getText()),
+				Double.valueOf(umPerPix.getText()));
 	}
 
 	public static void main(String[] args) {

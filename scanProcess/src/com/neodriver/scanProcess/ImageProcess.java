@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 public class ImageProcess {
 
-	public ImageProcess(int arg0, String arg1, int arg2, int arg3, float arg4) throws IOException {
+	public ImageProcess(int arg0, String arg1, int arg2, int arg3, double arg4) throws IOException {
 
 		// arg0 = position of the line (finalPos)
 		// arg1 = directory path

@@ -18,6 +18,7 @@ public class ImageProcess {
 		// arg4 = number of um per pixel
 		
 		int total = 0;
+		int stdevTot = 0;
 		int avg = 0;
 		int numFiles = arg3;
 		int fNum = 0;
@@ -62,10 +63,17 @@ public class ImageProcess {
 		}
 
 		for (int i = (bigWidthFileNum - numFiles); i <= (bigWidthFileNum + numFiles); i++) {
-			total += finalWidths[i];
+			System.out.println("File number: " + i + " width equals " + (finalWidths[i] * arg4) + "um");
+			total += (finalWidths[i] * arg4);
 			avg = total / ((arg3 * 2) + 1); // arg 3 = files either side, for both sides, plus the middle
 		}
-		System.out.println("The final average is: " + (avg * arg4));
+		System.out.println("");
+		System.out.println("The final average is: " + avg + "um");
+		
+		for (int i = (bigWidthFileNum - numFiles); i <= (bigWidthFileNum + numFiles); i++) {
+			stdevTot += Math.pow(((finalWidths[i] * arg4) - avg), 2);
+		}
+		System.out.println("The stDev is: " + (Math.sqrt(stdevTot/((arg3 * 2) + 1))));
 	}
 
 }

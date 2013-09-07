@@ -41,7 +41,7 @@ public class MainFrame extends JFrame {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				selFolder.setText(imagesFolder.getSelectedFile().toString());
 				Thread calcThread = new Thread(new Runnable() {
-	
+
 					@Override
 					public void run() {
 						try {
@@ -52,12 +52,12 @@ public class MainFrame extends JFrame {
 							e.printStackTrace();
 						}
 					}
-	
+
 				});
 				calcThread.start();
 				return;
 			}
-			
+
 		}
 	};
 
@@ -121,12 +121,11 @@ public class MainFrame extends JFrame {
 		JButton quitButton = new JButton("Quit");
 		quitButton.setToolTipText("Quits the program");
 		final JButton runButton = new JButton("Run");
-		quitButton.setToolTipText("Runs the program");
+		runButton.setToolTipText("Runs the program");
 		JButton browseButton = new JButton("Browse...");
 		browseButton.setToolTipText("Browse for the images folder");
 		JButton addButton = new JButton("Add");
-		addButton
-				.setToolTipText("Adds the current setting for batch processing");
+		addButton.setToolTipText("Adds the current setting for batch processing");
 
 		// Add the inputs to the input panel
 
@@ -175,37 +174,25 @@ public class MainFrame extends JFrame {
 						throw FileNotFoundException;
 					}
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(runButton,
-							"The path provided is not a valid directory!",
-							"Error!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(runButton, "The path provided is not a valid directory!", "Error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				try {
-					if (Integer.valueOf(imgsToUse.getText()) <= (bigWidthFileNum - 1)
-							&& Integer.valueOf(imgsToUse.getText()) > 0) {
+					if (Integer.valueOf(imgsToUse.getText()) <= (maxFiles) && Integer.valueOf(imgsToUse.getText()) > 0) {
 					} else {
 						throw IOException;
 					}
 				} catch (Exception e) {
-					JOptionPane
-							.showMessageDialog(
-									runButton,
-									"The max images to use is either greater than allowed, or is not a number!",
-									"Error!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(runButton, "The max images to use is either greater than allowed, or is not a number!", "Error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				try {
-					if (Double.valueOf(umPerPix.getText()) != null
-							&& Double.valueOf(umPerPix.getText()) > 0) {
+					if (Double.valueOf(umPerPix.getText()) != null && Double.valueOf(umPerPix.getText()) > 0) {
 					} else {
 						throw IOException;
 					}
 				} catch (Exception e) {
-					JOptionPane
-							.showMessageDialog(
-									runButton,
-									"The micrometers per pixel is invalid. Please enter a value greater than 0!",
-									"Error!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(runButton, "The micrometers per pixel is invalid. Please enter a value greater than 0!", "Error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
@@ -234,16 +221,14 @@ public class MainFrame extends JFrame {
 		bigWidthFileNum = count1.bigWidthFileNum;
 		maxFiles = count1.maxFiles;
 		finalPos = count1.finalPos;
-		imgNum.setText("Max images to use: " + (maxFiles - 1));
-		imgsToUse.setText("" + (maxFiles - 1));
+		imgNum.setText("Max images to use: " + (maxFiles));
+		imgsToUse.setText("" + (maxFiles));
 		umPerPix.setText(Double.toString(count1.pixelSize));
 
 	}
 
 	public void finalCalc() throws IOException {
-		ImageProcess process1 = new ImageProcess(finalPos, selFolder.getText(),
-				bigWidthFileNum, Integer.valueOf(imgsToUse.getText()),
-				Double.valueOf(umPerPix.getText()));
+		ImageProcess process1 = new ImageProcess(finalPos, selFolder.getText(), bigWidthFileNum, Integer.valueOf(imgsToUse.getText()), Double.valueOf(umPerPix.getText()));
 	}
 
 	public static void main(String[] args) {

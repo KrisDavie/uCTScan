@@ -33,15 +33,14 @@ public class ImageCount {
 		Arrays.sort(dirList);
 
 		for (File file : dirList) {
-			if (!file.getName().contains("spr.bmp")
-					&& file.getName().contains(".bmp")) {
+			if (!file.getName().contains("spr.bmp") && file.getName().contains(".bmp")) {
 				System.out.println(file);
 				dirLength++;
 			}
 		}
 
-		int[] filePos = new int[dirLength];
-		int[] fileLen = new int[dirLength];
+		int[] filePos = new int[dirLength]; // Check this
+		int[] fileLen = new int[dirLength]; // and this
 
 		JFrame progressFrame = new JFrame();
 		JProgressBar progressBar = new JProgressBar();
@@ -67,37 +66,33 @@ public class ImageCount {
 			}
 
 			if (child.getName().contains(".log")) {
-				BufferedReader lineReader = new BufferedReader(new FileReader(
-						child));
-				String line = lineReader.readLine();
-				while (line != null) {
+				BufferedReader lineReader = new BufferedReader(new FileReader(child));
+				String line = null;
+				while ((line = lineReader.readLine()) != null) {
 					System.out.println(line);
 
 					if (line.contains("2x2x2")) {
 						pixelMultiplier = 2;
-
+						System.out.println("Found 2x multiplier");
 					}
 					if (line.contains("3x3x3")) {
 						pixelMultiplier = 3;
-
+						System.out.println("Found 3x multiplier");
 					}
 					if (line.contains("4x4x4")) {
 						pixelMultiplier = 4;
-
+						System.out.println("Found 4x multiplier");
 					}
 
-					if (line.contains("Pixel Size")) {
-						origPixelSize = Double.parseDouble(line.substring(line
-								.lastIndexOf('.') - 1));
+					if (line.contains("Pixel Size") && !line.contains("Camera") && !line.contains("Image")) {						origPixelSize = Double.parseDouble(line.substring(line.lastIndexOf('.') - 1));
+						System.out.println("Orig pixel size is" + origPixelSize);
 					}
-					line = lineReader.readLine();
 				}
 				pixelSize = origPixelSize * pixelMultiplier;
 			}
 
 			if (child.getName().contains(".bmp")) {
-				progressSoFar.setText("Processing image " + curFile + " of "
-						+ dirLength);
+				progressSoFar.setText("Processing image " + curFile + " of " + dirLength);
 				BufferedImage curImg = ImageIO.read(child);
 				int height = curImg.getHeight();
 				int width = curImg.getWidth();
@@ -162,9 +157,9 @@ public class ImageCount {
 		// Work out the max files we can use on either side of the widest
 
 		if (bigWidthFileNum <= (dirLength - bigWidthFileNum)) {
-			maxFiles = bigWidthFileNum;
+			maxFiles = (bigWidthFileNum - 1);
 		} else {
-			maxFiles = (dirLength - bigWidthFileNum - 1);
+			maxFiles = (dirLength - bigWidthFileNum);
 		}
 		System.out.println(dirLength);
 		progressFrame.setVisible(false);

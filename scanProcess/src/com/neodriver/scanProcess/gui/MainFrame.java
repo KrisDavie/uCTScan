@@ -34,6 +34,7 @@ public class MainFrame extends JFrame {
 	public int bigWidthFileNum = 0;
 	public int finalPos = 0;
 	public int maxFiles = 0;
+	public String outputFile = null;
 	public ActionListener openListen = new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
 			imagesFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -228,7 +229,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void finalCalc() throws IOException {
-		ImageProcess process1 = new ImageProcess(finalPos, selFolder.getText(), bigWidthFileNum, Integer.valueOf(imgsToUse.getText()), Double.valueOf(umPerPix.getText()));
+		ImageProcess process1 = new ImageProcess(finalPos, selFolder.getText(), bigWidthFileNum, Integer.valueOf(imgsToUse.getText()), Double.valueOf(umPerPix.getText()), outputFile);
 	}
 
 	public static void main(String[] args) {

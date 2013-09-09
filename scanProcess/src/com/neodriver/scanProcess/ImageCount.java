@@ -84,7 +84,8 @@ public class ImageCount {
 						System.out.println("Found 4x multiplier");
 					}
 
-					if (line.contains("Pixel Size") && !line.contains("Camera") && !line.contains("Image")) {						origPixelSize = Double.parseDouble(line.substring(line.lastIndexOf('.') - 1));
+					if (line.contains("Pixel Size") && !line.contains("Camera") && !line.contains("Image")) {
+						origPixelSize = Double.parseDouble(line.substring(line.lastIndexOf('.') - 1));
 						System.out.println("Orig pixel size is" + origPixelSize);
 					}
 				}
@@ -131,7 +132,7 @@ public class ImageCount {
 
 					}
 				}
-				// Add the width and line number to the arrays for this file
+				// Add the width and line number of this file to the arrays
 				filePos[fNum] = bigWidthPos;
 				fileLen[fNum] = bigWidth;
 				fNum++;

@@ -34,6 +34,7 @@ public class MainFrame extends JFrame {
 	public int bigWidthFileNum = 0;
 	public int finalPos = 0;
 	public int maxFiles = 0;
+	public int dirSize = 0;
 	public String outputFile = null;
 	public ActionListener openListen = new ActionListener() {
 		public void actionPerformed(ActionEvent event) {
@@ -225,11 +226,12 @@ public class MainFrame extends JFrame {
 		imgNum.setText("Max images to use: " + (maxFiles));
 		imgsToUse.setText("" + (maxFiles));
 		umPerPix.setText(Double.toString(count1.pixelSize));
+		dirSize = count1.dirLength;
 
 	}
 
 	public void finalCalc() throws IOException {
-		ImageProcess process1 = new ImageProcess(finalPos, selFolder.getText(), bigWidthFileNum, Integer.valueOf(imgsToUse.getText()), Double.valueOf(umPerPix.getText()), outputFile);
+		ImageProcess process1 = new ImageProcess(finalPos, selFolder.getText(), bigWidthFileNum, Integer.valueOf(imgsToUse.getText()), Double.valueOf(umPerPix.getText()), dirSize, outputFile);
 	}
 
 	public static void main(String[] args) {

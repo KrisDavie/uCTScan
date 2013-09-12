@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 public class ImageProcess {
 
@@ -41,17 +42,17 @@ public class ImageProcess {
 		DateFormat fd = new SimpleDateFormat("(dd-MM-yy HHmm)");
 		String formattedDate = fd.format(date);
 		File outputFile = null;
-		System.out.println("writing file");
+		//System.out.println("writing file");
 		try {
 			outputFile = new File(arg1 + File.separator + "uTScan output.csv");
 			if (!outputFile.exists()) {
 				outputFile.createNewFile();
-				System.out.println("writing file1");
+				//System.out.println("writing file1");
 			} else {
 				outputFile = new File(arg1 + File.separator + "uCTScan output " + formattedDate + ".csv");
 				if (!outputFile.exists()) {
 					outputFile.createNewFile();
-					System.out.println("writing file2");
+					//System.out.println("writing file2");
 				}
 			}		
 			
@@ -69,7 +70,7 @@ public class ImageProcess {
 		wb.write("Widest point (pixels):," + finalPos);
 		wb.newLine();
 		wb.newLine();
-		wb.write("File Number,Width (um)");
+		wb.write("File Location,Width (um)");
 		wb.newLine();
 		wb.newLine();
 		for (File child : dirList) {
@@ -104,7 +105,7 @@ public class ImageProcess {
 		}
 
 		for (int i = (bigWidthFileNum - numFiles); i <= (bigWidthFileNum + numFiles); i++) {
-			wb.write(i + "," + (finalWidths[i] * arg4));
+			wb.write(dirList[i] + "," + (finalWidths[i] * arg4) + ",um");
 			wb.newLine();
 			total += (finalWidths[i] * arg4);
 			avg = total / ((arg3 * 2) + 1); // arg 3 = files either side, for both sides, plus the middle
@@ -119,6 +120,7 @@ public class ImageProcess {
 		}
 		wb.write("stDev:," + (Math.sqrt(stdevTot/((arg3 * 2) + 1))));
 		wb.close();
+		JOptionPane.showMessageDialog(null, "Analysis finished. Output file is located in the image folder", "Finished!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 }

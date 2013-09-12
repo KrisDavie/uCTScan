@@ -164,6 +164,7 @@ public class ImageCount {
 		}
 		System.out.println(dirLength);
 		progressFrame.setVisible(false);
+	
 
 	}
 

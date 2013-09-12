@@ -150,7 +150,7 @@ public class MainFrame extends JFrame {
 		JPanel addPanel = new JPanel();
 		addPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		panelButtons.add(addPanel);
-		addPanel.add(addButton);
+		//addPanel.add(addButton);
 		// getContentPane().add(BorderLayout.NORTH, panelDirectory);
 
 		// Listen to the quit button for an event (pressed) and quit

@@ -1,4 +1,4 @@
-package com.neodriver.scanProcess.gui;
+package com.neodriver.uCTScan.gui;
 
 //Imports
 import java.awt.*;
@@ -7,8 +7,8 @@ import java.io.*;
 
 import javax.swing.*;
 
-import com.neodriver.scanProcess.ImageCount;
-import com.neodriver.scanProcess.ImageProcess;
+import com.neodriver.uCTScan.ImageCount;
+import com.neodriver.uCTScan.ImageProcess;
 
 //Extend JFrame so we can use its methods
 public class MainFrame extends JFrame {

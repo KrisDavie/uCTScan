@@ -1,4 +1,4 @@
-package com.neodriver.scanProcess;
+package com.neodriver.uCTScan;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;

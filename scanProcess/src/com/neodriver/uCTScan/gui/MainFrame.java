@@ -24,10 +24,10 @@ public class MainFrame extends JFrame {
 
 	final JFileChooser imagesFolder = new JFileChooser();
 	public final JTextField imgsToUse = new JTextField(3);
-	JLabel imgsLabel = new JLabel("How many images shall we use?");
+	JLabel imgsLabel = new JLabel("How many images shall we use either side?");
 	public final JTextField umPerPix = new JTextField(5);
 	JLabel umLabel = new JLabel("How many micrometers per pixel?");
-	public JLabel imgNum = new JLabel("Max images to use: ");
+	public JLabel imgNum = new JLabel("Max images to use either side: ");
 	final JTextField selFolder = new JTextField(15);
 	JLabel folderPath = new JLabel("Please enter the path to the images folder");
 	public int[] finalVals = null;
@@ -58,6 +58,8 @@ public class MainFrame extends JFrame {
 				});
 				calcThread.start();
 				return;
+				
+				
 			}
 
 		}
@@ -227,6 +229,25 @@ public class MainFrame extends JFrame {
 		imgsToUse.setText("" + (maxFiles));
 		umPerPix.setText(Double.toString(count1.pixelSize));
 		dirSize = count1.dirLength;
+		
+		Thread ImageThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					ImageWin imgWin = new ImageWin(finalPos, selFolder.getText(), bigWidthFileNum);
+					//imgWin.imageWin.s
+					imgWin.imageWin.setSize(winX, winY);
+					imgWin.imageWin.setLocation(getX()+winX, getY());
+					imgWin.imageWin.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+		});
+		ImageThread.start();
+		return;
 
 	}
 

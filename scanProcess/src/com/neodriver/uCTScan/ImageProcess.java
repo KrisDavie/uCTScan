@@ -44,7 +44,7 @@ public class ImageProcess {
 		File outputFile = null;
 		//System.out.println("writing file");
 		try {
-			outputFile = new File(arg1 + File.separator + "uTScan output.csv");
+			outputFile = new File(arg1 + File.separator + "uCTScan output.csv");
 			if (!outputFile.exists()) {
 				outputFile.createNewFile();
 				//System.out.println("writing file1");
@@ -67,6 +67,7 @@ public class ImageProcess {
 		wb.newLine();
 		wb.newLine();
 		wb.write("Path to widest File:," + dirList[bigWidthFileNum]);
+		wb.newLine();
 		wb.write("Widest point (pixels):," + finalPos);
 		wb.newLine();
 		wb.newLine();
